@@ -1,8 +1,12 @@
 from rest_framework import serializers
-from .models import Comments
+from .models import Comment
 
 
-class CommentsSerializer(serializers.ModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Comment model
+    Adds three extra fields when returning a list of Comment instances
+    """
     owner = serializers.ReadOnlyField(source='owner.username')
     is_owner = serializers.SerializerMethodField()
     profile_id = serializers.ReadOnlyField(source='owner.profile.id')
@@ -13,10 +17,10 @@ class CommentsSerializer(serializers.ModelSerializer):
         return request.user == obj.owner
 
     class Meta:
-        model = Comments
+        model = Comment
         fields = [
-            'id', 'owner', 'created_at', 'updated_at', 'name',
-            'content', 'image', 'is_owner'
+            'id', 'owner', 'is_owner', 'profile_id', 'profile_image',
+            'post', 'created_at', 'updated_at', 'content'
         ]
 
 
